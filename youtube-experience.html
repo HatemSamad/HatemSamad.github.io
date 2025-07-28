@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My YouTube Experience</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f0f0;
+            color: #1a202c;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            max-width: 900px;
+            width: 100%;
+        }
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.5rem;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* Custom styles for video positioning and tilt */
+        .video-wrapper-right {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 4rem; /* Increased space below this video */
+            transform: rotate(5deg); /* Tilt to the right */
+            margin-right: -4rem; /* Adjusted to move slightly left */
+        }
+
+        .video-wrapper-left {
+            display: flex;
+            justify-content: flex-start;
+            margin-top: 4rem; /* Pushed lower */
+            margin-bottom: 4rem; /* Increased space below this video */
+            transform: rotate(-5deg); /* Tilt to the left */
+            margin-left: -4rem; /* Adjusted to move slightly right */
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 768px) {
+            .video-wrapper-right, .video-wrapper-left {
+                justify-content: center; /* Center videos on small screens */
+                margin-left: 0;
+                margin-right: 0;
+                transform: none; /* Remove tilt on small screens */
+                margin-top: 2rem; /* Adjust vertical spacing for mobile */
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4 text-gray-800">My YouTube Journey & Experience</h1>
+        <p class="text-lg text-gray-700 mb-8">
+            Welcome to my YouTube experience page! Here, I share insights into my journey,
+            what I do, and some highlights from my video content.
+        </p>
+
+        <!-- Video 1: Right side, tilted right -->
+        <div class="video-wrapper-right">
+            <div class="w-48">
+                <div class="video-container">
+                    <iframe 
+                        src="https://www.youtube.com/embed/OPJlUYzYPNY?autoplay=1&mute=1&loop=1&playlist=OPJlUYzYPNY&controls=0" 
+                        title="YouTube video player" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- Video 2: Left side, tilted left -->
+        <div class="video-wrapper-left">
+            <div class="w-48">
+                <div class="video-container">
+                    <iframe 
+                        src="https://www.youtube.com/embed/Ok6a2XoH-P4?autoplay=1&mute=1&loop=1&playlist=Ok6a2XoH-P4&controls=0" 
+                        title="YouTube video player" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add more video embeds as needed, following the pattern -->
+
+        <p class="text-base text-gray-600 mb-8">
+            These clips offer a glimpse into my work and passion. Feel free to explore my full channel for more!
+        </p>
+
+        <a href="index.html" class="inline-block bg-black text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-800 transition duration-300">
+            Go Back to Portfolio
+        </a>
+    </div>
+</body>
+</html>

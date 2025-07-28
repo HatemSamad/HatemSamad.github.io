@@ -1,0 +1,214 @@
+/* styles.css */
+
+/* Custom font-face for Ragfile - REMOVED */
+/* @font-face {
+    font-family: 'Ragfile';
+    src: url('Ragfile.otf') format('opentype'),
+         url('Ragfile.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+} */
+
+/* Custom styles for the zig-zag timeline */
+
+/* General timeline container adjustments for responsiveness */
+.wrap {
+    padding: 0 1rem; /* Adjust padding for smaller screens */
+}
+
+/* Vertical line in the middle */
+.border-2-2 {
+    left: 50%; /* Position in the middle */
+    transform: translateX(-50%); /* Center it precisely */
+    width: 4px; /* Thickness of the vertical line */
+    background-color: #d1d5db; /* Light gray color for the line (Tailwind gray-300 equivalent) */
+    border: none; /* Remove default border */
+}
+
+/* Timeline item styling */
+.timeline-item > div {
+    /* Base styles for the content boxes */
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease-in-out;
+}
+
+.timeline-item > div:hover {
+    transform: scale(1.03); /* Slightly enlarge on hover */
+}
+
+/* Right side timeline items */
+.right-timeline {
+    justify-content: flex-end; /* Push content to the right */
+}
+
+.right-timeline .order-1 {
+    order: 1;
+}
+
+.right-timeline .w-5/12 {
+    margin-left: 1rem; /* Space between line and content */
+}
+
+/* Left side timeline items */
+.left-timeline {
+    justify-content: flex-start; /* Push content to the left */
+}
+
+.left-timeline .order-1 {
+    order: 1;
+}
+
+.left-timeline .w-5/12 {
+    margin-right: 1rem; /* Space between line and content */
+}
+
+/* Circle markers on the timeline */
+.z-20 {
+    z-index: 20;
+}
+
+/* Responsive adjustments for timeline */
+@media (max-width: 768px) {
+    .wrap {
+        padding: 0; /* Remove horizontal padding on very small screens */
+    }
+
+    .border-2-2 {
+        left: 20px; /* Move vertical line to the left for mobile */
+        transform: translateX(0);
+    }
+
+    .left-timeline, .right-timeline {
+        flex-direction: column; /* Stack items vertically */
+        align-items: flex-start; /* Align content to the start */
+    }
+
+    .left-timeline .w-5/12, .right-timeline .w-5/12 {
+        width: calc(100% - 60px); /* Adjust width to fit next to the line */
+        margin-left: 60px; /* Space for the line and circle */
+        margin-right: 0;
+    }
+
+    .z-20 {
+        position: absolute;
+        left: 10px; /* Position circles near the line */
+    }
+}
+
+/* Keyframe animations for hero section */
+@keyframes fadeInFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInFromBottom 0.8s ease-out forwards;
+    opacity: 0; /* Start invisible */
+}
+
+.animate-fade-in-up.delay-200 {
+    animation-delay: 0.2s;
+}
+
+.animate-fade-in-up.delay-400 {
+    animation-delay: 0.4s;
+}
+
+/* Pulsing animation for hero icons */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.5; /* Adjusted for visibility on white background */
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7; /* Adjusted for visibility on white background */
+        transform: scale(1.05);
+    }
+}
+
+.animate-pulse {
+    animation: pulse 3s infinite ease-in-out;
+}
+.animate-pulse.delay-100 { animation-delay: 0.1s; }
+.animate-pulse.delay-200 { animation-delay: 0.2s; }
+.animate-pulse.delay-300 { animation-delay: 0.3s; }
+.animate-pulse.delay-400 { animation-delay: 0.4s; }
+
+/* Paper Airplane Base Styling */
+/* Initial position for paper-airplane (top-right) */
+#paper-airplane {
+    position: absolute;
+    top: 20px; 
+    right: 20px;
+    width: 100px; /* Default size, will be overridden by JS */
+    height: 100px; /* Default size, will be overridden by JS */
+    z-index: -1; /* Changed z-index to be behind other elements in the section */
+    transition: transform 0.1s linear; 
+}
+
+/* Initial position for paper-airplane-2 (top-left) */
+#paper-airplane-2 {
+    position: absolute;
+    top: 20px; 
+    left: 20px; /* Position from left */
+    width: 100px; /* Default size, will be overridden by JS */
+    height: 100px; /* Default size, will be overridden by JS */
+    z-index: -1; /* Changed z-index to be behind other elements in the section */
+    transition: transform 0.1s linear; 
+}
+
+#paper-airplane img,
+#paper-airplane-2 img { 
+    width: 100%;
+    height: 100%;
+    object-fit: contain; 
+}
+
+/* New style for the navigation bar when it overlaps with white sections */
+.nav-dark-state {
+    background-color: rgba(55, 65, 81, 0.5); /* Tailwind gray-800 with 50% opacity */
+}
+
+/* Override text colors for links within the dark navigation bar state */
+.nav-dark-state a {
+    color: #ffffff !important; /* White text for links */
+}
+
+.nav-dark-state a:hover {
+    color: rgba(229, 231, 235, 0.8) !important; /* Tailwind gray-200 with 80% opacity for hover */
+}
+
+/* Added transition for filter property to the experience section */
+#experience, #fixedHeroContent { /* Added #fixedHeroContent for blur transition */
+    transition: filter 0.3s ease-out;
+}
+
+/* New classes for fading elements */
+.fade-out {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.5s ease-out;
+}
+
+.fade-in {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transition: opacity 0.5s ease-in;
+}
+
+/* Pattern for the Experience Section background */
+#experience {
+    background-color: #ffffff; /* Fallback color */
+    background-image: url('pattern.jpg'); /* Set the pattern image to JPG */
+    background-repeat: no-repeat; /* Ensure the image does not repeat */
+    background-size: cover; /* Scale the image to cover the entire section */
+    background-position: center center; /* Center the image in the section */
+}

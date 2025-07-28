@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hatem Samad - Portfolio</title>
+    <link rel="icon" type="image/png" href="Untitled_design__32_-removebg-preview.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles.css"> 
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/color-thief/2.3.0/color-thief.umd.js"></script>
+
+    <style>
+        /* Custom Tailwind configuration for blur effect */
+        @tailwind base;
+        @tailwind components;
+        @tailwind utilities;
+
+        /* Smooth scrolling for anchor links */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Body basic styling */
+        body {
+            font-family: 'Outfit', sans-serif; /* Changed font to Outfit */
+            background-color: #ffffff; /* Pure white background */
+            color: #1a202c; /* Very dark grey/almost black text */
+        }
+
+        /* Custom blur effect for navigation and mobile menu */
+        .backdrop-blur-custom {
+            backdrop-filter: blur(20px); /* Increased blur strength */
+            -webkit-backdrop-filter: blur(20px); /* Safari support */
+        }
+
+        /* Hide scrollbar for a cleaner look, but keep functionality */
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        body {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+        /* Custom style for hero title opacity */
+        .hero-title-custom {
+            color: rgba(34, 197, 94, 0.85); /* Green color with 85% opacity */
+        }
+
+        /* Style for the project card to make the whole card clickable */
+        /* This class is now no longer applied to project 1 after revert */
+        .project-card-link {
+            display: flex; /* Use flexbox to organize content vertically */
+            flex-direction: column;
+            text-decoration: none; /* Remove underline from text */
+            color: inherit; /* Inherit color from parent */
+            background-color: #ffffff;
+            border-radius: 0.75rem; /* rounded-lg */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */
+            overflow: hidden;
+            transform: scale(1); /* Initial state for hover effect */
+            transition: transform 0.3s ease-in-out; /* transition duration-300 */
+            cursor: pointer;
+        }
+
+        .project-card-link:hover {
+            transform: scale(1.05); /* hover:scale-105 */
+        }
+
+        /* Ensure images inside cards are responsive */
+        .project-card-link img {
+            width: 100%;
+            height: 12rem; /* h-48 */
+            object-fit: cover;
+        }
+
+        /* Styling for the content area inside the link */
+        .project-card-content {
+            padding: 1.5rem; /* p-6 */
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1; /* Allow content to grow and fill space */
+        }
+
+        /* Adjust GitHub link placement within the card */
+        .project-links-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <nav class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl z-50 bg-white bg-opacity-10 backdrop-blur-custom shadow-sm py-4 px-6 md:px-12 transform transition-all duration-300 ease-in-out rounded-full mt-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="#hero" class="text-2xl font-bold text-gray-800 hover:text-black transition duration-300 flex items-center">
+                Hatem Samad
+            </a>
+
+            <div class="hidden md:flex space-x-8">
+                <a href="#experience" class="text-lg font-medium text-gray-700 hover:text-black transition duration-300">Experience</a>
+                <a href="#projects" class="text-lg font-medium text-gray-700 hover:text-black transition duration-300">Projects</a>
+                <a href="#contact" class="text-lg font-medium text-gray-700 hover:text-black transition duration-300">Contact</a>
+            </div>
+
+            <div class="md:hidden">
+                <button id="mobile-menu-button" class="text-gray-700 hover:text-black focus:outline-none">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="mobile-menu" class="fixed top-0 left-0 w-full h-full bg-white bg-opacity-90 backdrop-blur-custom z-40 flex flex-col items-center justify-center space-y-8 transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden">
+        <button id="close-mobile-menu" class="absolute top-6 right-6 text-gray-700 hover:text-black focus:outline-none">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+        <a href="#experience" class="text-3xl font-bold text-gray-800 hover:text-black transition duration-300" data-section="experience">Experience</a>
+        <a href="#projects" class="text-3xl font-bold text-gray-800 hover:text-black transition duration-300" data-section="projects">Projects</a>
+        <a href="#contact" class="text-3xl font-bold text-gray-800 hover:text-black transition duration-300" data-section="contact">Contact</a>
+    </div>
+
+    <section id="hero" class="relative h-screen overflow-hidden">
+        <div class="fixed inset-0 w-full h-full z-45" id="fixedHeroContent">
+            <div class="absolute inset-0 z-0" id="heroBackground" style="background-image: url('HatemPicture111.jpg'); background-size: cover; background-position: center; filter: brightness(0.7);"></div>
+            
+            <div class="absolute inset-0 z-20"> 
+                <img src="hatemtransparentpic.png" alt="Hatem Samad Transparent" class="w-full h-full object-cover object-center filter brightness-90">
+            </div>
+
+            <div class="absolute z-10 text-center flex flex-col items-center justify-center top-[40%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-full">
+                <div class="flex justify-center items-center mb-4">
+                    <h1 class="text-8xl md:text-9xl font-extrabold leading-tight animate-fade-in-up tracking-tight hero-title-custom mr-16" id="hero-hatem">Hatem</h1>
+                    <h1 class="text-8xl md:text-9xl font-extrabold leading-tight animate-fade-in-up tracking-tight hero-title-custom ml-16" id="hero-samad">Samad</h1>
+                </div>
+            </div>
+
+            <div class="absolute z-30 text-center top-[60%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-full"> 
+                <p class="text-xl md:text-2xl font-light mb-8 animate-fade-in-up delay-200 text-white" id="heroDescription">A passionate [Your Profession/Field] dedicated to [Your Key Skill/Goal].</p>
+                <a href="#experience" id="viewWorkButton" class="inline-block bg-white bg-opacity-10 backdrop-blur-custom text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-white hover:bg-opacity-20 transform hover:scale-105 transition duration-300 animate-fade-in-up delay-400">View My Work <i class="fas fa-arrow-right ml-2"></i></a>
+            </div>
+        </div>
+        <div class="h-screen w-full relative z-0 pointer-events-none"></div>
+    </section>
+
+    <section id="experience" class="py-16 md:py-24 bg-white relative z-40 overflow-hidden">
+        <div class="container mx-auto px-6 max-w-6xl">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-16 text-gray-800">My Journey & Experience</h2>
+            
+            <div id="paper-airplane" class="absolute">
+                <img src="paperplane.png" alt="Paper Airplane" class="w-full h-full object-contain">
+            </div>
+
+            <div id="paper-airplane-2" class="absolute">
+                <img src="paperplane.png" alt="Paper Airplane 2" class="w-full h-full object-contain">
+            </div>
+
+            <div class="relative wrap overflow-hidden p-10 h-full z-2">
+                <div class="border-2-2 absolute border-opacity-20 border-gray-300 h-full border" style="left: 50%;"></div>
+
+                <div class="mb-8 flex justify-between items-center w-full right-timeline">
+                    <div class="order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-black shadow-xl w-8 h-8 rounded-full">
+                        <h1 class="mx-auto font-semibold text-lg text-white">1</h1> </div>
+                    <div class="order-1 w-5/12 px-2 py-2 flex justify-center items-center">
+                        <a href="youtube-experience.html" target="_blank" class="text-red-600 hover:text-red-800 transition duration-300 transform hover:scale-110">
+                            <i class="fab fa-youtube text-9xl"></i> 
+                        </a>
+                        <div class="ml-4 text-left">
+                            <h3 class="text-2xl font-bold text-gray-800">YouTube</h3>
+                            <p class="text-lg font-light text-gray-700">Where my creativity unleashes.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline">
+                    <div class="order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-black shadow-xl w-8 h-8 rounded-full">
+                        <h1 class="mx-auto font-semibold text-lg text-white">2</h1> </div>
+                    <div class="order-1 w-5/12 px-2 py-2 flex justify-center items-center">
+                        <a href="https://www.youtube.com/@integrityfilmsproduction" target="_blank" class="block transition duration-300 transform hover:scale-110">
+                            <img src="CinemaCamera.png" alt="Cinema Camera" class="w-full h-auto max-w-xs mx-auto">
+                        </a>
+                        <div class="ml-4 text-left">
+                            <h3 class="text-2xl font-bold text-gray-800">Camera</h3>
+                            <p class="text-lg font-light text-gray-700">some text idk what</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8 flex justify-between items-center w-full right-timeline">
+                    <div class="order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-black shadow-xl w-8 h-8 rounded-full">
+                        <h1 class="mx-auto font-semibold text-lg text-white">3</h1> </div>
+                    <div class="order-1 w-5/12 px-2 py-2 flex justify-center items-center">
+                        <a href="medals.html" target="_blank" class="block transition duration-300 transform hover:scale-110">
+                            <img src="6medals.png" alt="6 Medals" class="w-full h-auto max-w-xs mx-auto">
+                        </a>
+                        <div class="ml-4 text-left">
+                            <h3 class="text-2xl font-bold text-gray-800">Competitions</h3>
+                            <p class="text-lg font-light text-gray-700">my physical achievements</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-8 flex justify-between flex-row-reverse items-center w-full left-timeline">
+                    <div class="order-1 w-5/12"></div>
+                    <div class="z-20 flex items-center order-1 bg-black shadow-xl w-8 h-8 rounded-full">
+                        <h1 class="mx-auto font-semibold text-lg text-white">4</h1> </div>
+                    <div class="order-1 w-5/12 px-2 py-2 flex justify-center items-center">
+                        <a href="laptop-projects.html" target="_blank" class="block transition duration-300 transform hover:scale-110">
+                            <img src="laptoppicdrawing.png" alt="Laptop Drawing" class="w-full h-auto max-w-xs mx-auto">
+                        </a>
+                        <div class="ml-4 text-left">
+                            <h3 class="text-2xl font-bold text-gray-800">Technology</h3>
+                            <p class="text-lg font-light text-gray-700">my digital achievements.</p>
+                        </div>
+                    </div>
+                </div>
+
+                </div>
+        </div>
+    </section>
+
+    <section id="projects" class="py-16 md:py-24 bg-gray-50 relative z-40">
+        <div class="container mx-auto px-6 max-w-6xl">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-gray-800">My Projects</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-xl overflow-hidden transform hover:scale-105 transition duration-300 cursor-pointer">
+                    <img src="grocerie.jpg" alt="Grocerie Project" class="w-full h-48 object-contain">
+                    <div class="p-6">
+                        <h3 class="mb-3 font-bold text-gray-800 text-xl">Grocerie <i class="fas fa-desktop ml-2 text-gray-700"></i></h3>
+                        <p class="text-gray-700 text-base mb-4">Grocerie is your shopping's co-pilot. Save money by comparing prices.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-gray-200 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">HTML <i class="fab fa-html5 ml-1"></i></span>
+                            <span class="bg-gray-200 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">CSS <i class="fab fa-css3-alt ml-1"></i></span>
+                            <span class="bg-gray-200 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">JavaScript <i class="fab fa-js ml-1"></i></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="#" target="_blank" class="text-gray-700 hover:text-black font-semibold text-sm">Live Demo <i class="fas fa-external-link-alt ml-1"></i></a>
+                            <a href="#" target="_blank" class="text-gray-700 hover:text-black font-semibold text-sm">GitHub <i class="fab fa-github ml-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-xl overflow-hidden transform hover:scale-105 transition duration-300 cursor-pointer">
+                    <img src="https://placehold.co/600x400/ffffff/000000?text=Project+2" alt="Project 2" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="mb-3 font-bold text-gray-800 text-xl">Project Title Two <i class="fas fa-chart-line ml-2 text-gray-700"></i></h3>
+                        <p class="text-gray-700 text-base mb-4">Description for Project Two, focusing on its unique aspects and the problems it solves. Showcases [another skill].</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-gray-200 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Python <i class="fab fa-python ml-1"></i></span>
+                            <span class="bg-gray-200 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">Django <i class="fas fa-code ml-1"></i></span>
+                            <span class="bg-gray-200 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">PostgreSQL <i class="fas fa-database ml-1"></i></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="#" target="_blank" class="text-gray-700 hover:text-black font-semibold text-sm">Live Demo <i class="fas fa-external-link-alt ml-1"></i></a>
+                            <a href="#" target="_blank" class="text-gray-700 hover:text-black font-semibold text-sm">GitHub <i class="fab fa-github ml-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-xl overflow-hidden transform hover:scale-105 transition duration-300 cursor-pointer">
+                    <img src="https://placehold.co/600x400/ffffff/000000?text=Project+3" alt="Project 3" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="mb-3 font-bold text-gray-800 text-xl">Project Title Three <i class="fas fa-mobile-alt ml-2 text-gray-700"></i></h3>
+                        <p class="text-gray-700 text-base mb-4">Details about Project Three, including the challenges faced and solutions implemented. Demonstrates your ability in [specific area].</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-gray-200 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">JavaScript <i class="fab fa-js ml-1"></i></span>
+                            <span class="bg-gray-200 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">HTML/CSS <i class="fab fa-html5 ml-1"></i></span>
+                            <span class="bg-gray-200 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded-full">APIs <i class="fas fa-cloud-upload-alt ml-1"></i></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <a href="#" target="_blank" class="text-gray-700 hover:text-black font-semibold text-sm">Live Demo <i class="fas fa-external-link-alt ml-1"></i></a>
+                            <a href="#" target="_blank" class="text-gray-700 hover:text-black font-semibold text-sm">GitHub <i class="fab fa-github ml-1"></i></a>
+                        </div>
+                    </div>
+                </div>
+                </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-12 md:py-16 bg-white bg-opacity-10 backdrop-blur-custom text-white relative z-40 pb-0">
+        <div class="container mx-auto px-6 max-w-4xl text-center">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">Get In Touch <i class="fas fa-envelope ml-2"></i></h2>
+            <p class="text-lg mb-10">I'm always open to new opportunities and collaborations. Feel free to reach out!</p>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-6">
+                <a href="mailto:your.email@example.com" class="bg-white text-black px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-100 transform hover:scale-105 transition duration-300">
+                    Email Me <i class="fas fa-paper-plane ml-2"></i>
+                </a>
+                <a href="https://instagram.com/h_alsamad" target="_blank" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-white hover:text-black transform hover:scale-105 transition duration-300">
+                    Instagram <i class="fab fa-instagram ml-2"></i>
+                </a>
+                <a href="https://github.com/yourusername" target="_blank" class="bg-transparent border-2 border-white text-white px-8 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-white hover:text-black transform hover:scale-105 transition duration-300">
+                    GitHub <i class="fab fa-github ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-white bg-opacity-10 backdrop-blur-custom text-white py-4 text-center text-sm relative z-40 pt-0">
+        <p>© 2025 Hatem Samad. All rights reserved.</p>
+        <p class="mt-2">Built with <span class="text-gray-400">♥</span> and Tailwind CSS.</p>
+    </footer>
+
+    <a href="your_resume.pdf" target="_blank" id="resume-button" class="fixed bottom-6 left-6 bg-white bg-opacity-10 backdrop-blur-custom text-white px-6 py-3 rounded-full shadow-lg hover:bg-white hover:bg-opacity-20 transform hover:scale-105 transition duration-300 z-50">
+        My Resume <i class="fas fa-file-alt ml-2"></i>
+    </a>
+
+    <script src="script.js"></script>
+</body>
+</html>
