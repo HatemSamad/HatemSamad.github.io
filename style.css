@@ -1,0 +1,1084 @@
+/* style.css */
+
+/* CSS Variables for Colors */
+:root {
+    --color-white: #ffffff;
+    --color-black: #000000;
+    --color-dark-grey: #1a202c;
+    --color-light-grey: #f0f0f0;
+    --color-medium-grey: #d1d5db; /* gray-300 */
+    --color-dark-blue-grey: #374151; /* gray-800 */
+    --color-green-accent: rgba(34, 197, 94, 0.85); /* green-500 with 85% opacity */
+    --color-red-youtube: #dc2626; /* red-600 */
+    --color-text-light: #e5e7eb; /* gray-200 */
+
+    /* Opacity variations - ADJUSTED OPACITY */
+    --opacity-blur-bg: rgba(255, 255, 255, 0.2); /* Lowered from 0.4 to 0.2 for dimmer effect */
+    --opacity-dark-nav-bg: rgba(55, 65, 81, 0.7); /* Lowered from 0.9 to 0.7 */
+    --opacity-resume-btn-dark: rgba(55, 65, 81, 0.7); /* Lowered from 0.9 to 0.7 */
+}
+
+/* Basic Resets */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 16px; /* Base font size */
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--color-white); /* Pure white background */
+    color: var(--color-dark-grey); /* Very dark grey/almost black text */
+    line-height: 1.6;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+/* Hide scrollbar for a cleaner look, but keep functionality */
+body::-webkit-scrollbar {
+    display: none;
+}
+body {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Custom Backdrop Blur Effect */
+.backdrop-blur-custom {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px); /* Safari support */
+}
+
+/* Container for sections to limit width and center content */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem; /* px-6 */
+}
+
+/* Section Titles */
+.section-title {
+    font-size: 2.5rem; /* text-4xl */
+    font-weight: 700; /* font-bold */
+    text-align: center;
+    margin-bottom: 4rem; /* mb-16 */
+    color: var(--color-dark-grey);
+}
+@media (min-width: 768px) {
+    .section-title {
+        font-size: 3rem; /* md:text-5xl */
+    }
+}
+
+/* --- Navigation Bar --- */
+.main-nav {
+    position: fixed;
+    top: 1rem; /* mt-4 */
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 3rem); /* Adjust for padding on small screens */
+    max-width: 80rem; /* max-w-5xl */
+    z-index: 50;
+    background-color: var(--opacity-blur-bg); /* Uses updated opacity */
+    border-radius: 9999px; /* rounded-full */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+    padding: 1rem 1.5rem; /* py-4 px-6 */
+    transition: all 0.3s ease-in-out, opacity 0.3s ease-in-out; /* Added opacity transition */
+}
+@media (min-width: 768px) {
+    .main-nav {
+        padding: 1rem 3rem; /* md:px-12 */
+    }
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px; /* container mx-auto */
+    margin: 0 auto;
+}
+
+.nav-brand {
+    font-size: 1.5rem; /* text-2xl */
+    font-weight: 700; /* font-bold */
+    color: var(--color-dark-grey);
+    text-decoration: none;
+    transition: color 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+.nav-brand:hover {
+    color: var(--color-black);
+}
+
+.nav-links-desktop {
+    display: none; /* hidden */
+    gap: 2rem; /* space-x-8 */
+}
+@media (min-width: 768px) {
+    .nav-links-desktop {
+        display: flex; /* md:flex */
+    }
+}
+
+.nav-links-desktop a {
+    font-size: 1.125rem; /* text-lg */
+    font-weight: 500; /* font-medium */
+    color: #4a5568; /* gray-700 */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.nav-links-desktop a:hover {
+    color: var(--color-black);
+}
+
+.mobile-menu-toggle {
+    display: block; /* md:hidden */
+}
+@media (min-width: 768px) {
+    .mobile-menu-toggle {
+        display: none;
+    }
+}
+
+.menu-button {
+    background: none;
+    border: none;
+    color: #4a5568; /* gray-700 */
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: color 0.3s ease;
+}
+.menu-button:hover {
+    color: var(--color-black);
+}
+.menu-button:focus {
+    outline: none;
+}
+.icon-menu {
+    width: 2rem; /* w-8 */
+    height: 2rem; /* h-8 */
+}
+
+/* Nav hidden state (JS controlled) */
+.main-nav.hidden-nav {
+    opacity: 0;
+    pointer-events: none; /* Disable clicks when hidden */
+}
+
+/* Dark state for navigation bar (when overlapping white sections) */
+.main-nav.nav-dark-state {
+    background-color: var(--opacity-dark-nav-bg); /* Uses updated opacity */
+}
+.main-nav.nav-dark-state .nav-brand,
+.main-nav.nav-dark-state .nav-links-desktop a,
+.main-nav.nav-dark-state .menu-button {
+    color: var(--color-white) !important;
+}
+.main-nav.nav-dark-state .nav-brand:hover,
+.main-nav.nav-dark-state .nav-links-desktop a:hover,
+.main-nav.nav-dark-state .menu-button:hover {
+    color: rgba(229, 231, 235, 0.8) !important; /* gray-200 with 80% opacity */
+}
+
+
+/* --- Mobile Menu Overlay --- */
+.mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9); /* bg-white bg-opacity-90 */
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem; /* space-y-8 */
+    transform: translateX(-100%); /* -translate-x-full */
+    transition: transform 0.3s ease-in-out;
+}
+.mobile-menu-overlay.is-open {
+    transform: translateX(0);
+}
+
+.close-menu-button {
+    position: absolute;
+    top: 1.5rem; /* top-6 */
+    right: 1.5rem; /* right-6 */
+    background: none;
+    border: none;
+    color: #4a5568; /* gray-700 */
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: color 0.3s ease;
+}
+.close-menu-button:hover {
+    color: var(--color-black);
+}
+.close-menu-button:focus {
+    outline: none;
+}
+.icon-close {
+    width: 2rem; /* w-8 */
+    height: 2rem; /* h-8 */
+}
+
+.mobile-menu-overlay a {
+    font-size: 1.875rem; /* text-3xl */
+    font-weight: 700; /* font-bold */
+    color: var(--color-dark-grey);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.mobile-menu-overlay a:hover {
+    color: var(--color-black);
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.fixed-hero-content {
+    position: fixed;
+    inset: 0; /* top-0 left-0 right-0 bottom-0 */
+    width: 100%;
+    height: 100%;
+    z-index: 45; /* z-45 */
+    transition: filter 0.3s ease-out; /* For blur transition */
+}
+
+.hero-background {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.7);
+    transition: filter 0.3s ease-out;
+}
+
+.hero-overlay-image {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+}
+.hero-overlay-img-element {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: brightness(0.9);
+    transition: filter 0.3s ease-out;
+}
+
+.hero-title-container {
+    position: absolute;
+    z-index: 10;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    top: 40%; /* top-[40%] */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+}
+
+.hero-name-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem; /* mb-4 */
+}
+
+.hero-title {
+    font-size: 5rem; /* text-8xl */
+    font-weight: 800; /* font-extrabold */
+    line-height: 1; /* leading-tight */
+    letter-spacing: -0.05em; /* tracking-tight */
+    color: var(--color-green-accent);
+}
+.hero-title:first-child {
+    margin-right: 4rem; /* mr-16 */
+}
+.hero-title:last-child {
+    margin-left: 4rem; /* ml-16 */
+}
+
+@media (min-width: 768px) {
+    .hero-title {
+        font-size: 6rem; /* md:text-9xl */
+    }
+}
+
+.hero-description-container {
+    position: absolute;
+    z-index: 30;
+    text-align: center;
+    top: 60%; /* top-[60%] */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+}
+
+.hero-description {
+    font-size: 1.25rem; /* text-xl */
+    font-weight: 300; /* font-light */
+    margin-bottom: 2rem; /* mb-8 */
+    color: var(--color-white);
+}
+@media (min-width: 768px) {
+    .hero-description {
+        font-size: 1.5rem; /* md:text-2xl */
+    }
+}
+
+.view-work-button {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.4); /* Uses updated opacity */
+    color: var(--color-white);
+    padding: 0.75rem 2rem; /* px-8 py-3 */
+    border-radius: 9999px; /* rounded-full */
+    font-size: 1.125rem; /* text-lg */
+    font-weight: 600; /* font-semibold */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+.view-work-button:hover {
+    background-color: rgba(255, 255, 255, 0.5); /* hover:bg-white hover:bg-opacity-20 */
+    transform: scale(1.05); /* hover:scale-105 */
+}
+.icon-arrow-right {
+    margin-left: 0.5rem; /* ml-2 */
+}
+
+.hero-scroll-spacer {
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* --- Experience Section --- */
+.experience-section {
+    padding-top: 4rem; /* py-16 */
+    padding-bottom: 4rem; /* py-16 */
+    background-color: var(--color-white); /* bg-white fallback */
+    background-image: url('Pattern.jpg'); /* Changed to Pattern.jpg */
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    position: relative;
+    z-index: 46; /* Increased z-index to be above fixed-hero-content */
+    overflow: hidden;
+    transition: filter 0.3s ease-out; /* For motion blur */
+}
+@media (min-width: 768px) {
+    .experience-section {
+        padding-top: 6rem; /* md:py-24 */
+        padding-bottom: 6rem; /* md:py-24 */
+    }
+}
+
+/* Paper Airplane Styling */
+.paper-airplane {
+    position: absolute;
+    width: 100px; /* Default size, will be overridden by JS */
+    height: 100px; /* Default size, will be overridden by JS */
+    z-index: -1; /* Behind other elements */
+    transition: transform 0.1s linear; /* Smooth movement */
+}
+.paper-airplane img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+#paper-airplane { /* Initial position for plane 1 */
+    top: 20px;
+    right: 20px;
+}
+#paper-airplane-2 { /* Initial position for plane 2 */
+    top: 20px;
+    left: 20px;
+}
+
+/* Timeline Styling */
+.timeline-wrap {
+    position: relative;
+    overflow: hidden;
+    padding: 2.5rem; /* p-10 */
+    display: flex;
+    flex-direction: column;
+    min-height: 1400px; /* Increased min-height for more vertical space */
+    max-width: 1000px; /* Adjust as needed */
+    margin: 0 auto;
+}
+
+.timeline-line {
+    position: absolute;
+    left: 50%; /* Centered horizontally */
+    transform: translateX(-50%); /* Adjust for horizontal centering */
+    width: 4px;
+    height: 100%;
+    background-color: var(--color-medium-grey);
+}
+
+.timeline-item {
+    margin-bottom: 8rem; /* Increased margin-bottom for more space between items */
+    width: 100%;
+    position: relative;
+    display: flex; /* Use flexbox for item layout */
+    align-items: center; /* Vertically center content with the circle */
+    min-height: 150px; /* Ensure each item has enough height */
+}
+
+.timeline-item .timeline-circle {
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-black);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    width: 2.5rem; /* Slightly larger circle */
+    height: 2.5rem; /* Slightly larger circle */
+    border-radius: 9999px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.timeline-item .timeline-circle h1 {
+    margin: 0;
+    font-size: 1.25rem; /* Larger number */
+    font-weight: 600;
+    color: var(--color-white);
+}
+
+/* Wrapper for content to allow independent positioning */
+.timeline-item .timeline-content-wrapper {
+    padding: 1.5rem; /* Increased padding for more internal space */
+    display: flex;
+    align-items: center; /* Align items vertically within the wrapper */
+    background-color: var(--color-white);
+    border-radius: 0.75rem; /* Slightly more rounded corners */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease-in-out;
+    flex-grow: 1; /* Allow content to grow */
+    width: calc(50% - 4rem); /* Adjusted width to account for larger margin */
+}
+.timeline-item .timeline-content-wrapper:hover {
+    transform: scale(1.03);
+}
+
+.timeline-item .timeline-link {
+    display: block;
+    transition: transform 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    /* Removed margin-right/left here, will be handled by content-wrapper flex */
+}
+
+.timeline-item .timeline-icon {
+    font-size: 6.5rem; /* Larger icons */
+    /* Margin for icons will be set by specific left/right classes */
+}
+.timeline-item .youtube-icon {
+    color: var(--color-red-youtube);
+}
+.timeline-item .timeline-image {
+    max-width: 280px; /* Even Larger image size */
+    height: auto;
+    display: block;
+    /* Margin for images will be set by specific left/right classes */
+}
+
+.timeline-item .timeline-text {
+    flex-grow: 1; /* Allow text to take remaining space */
+    /* Text alignment will be set by specific left/right classes */
+}
+.timeline-item .timeline-text h3 {
+    font-size: 1.625rem; /* Slightly larger heading */
+    font-weight: 700;
+    color: var(--color-dark-grey);
+    margin-bottom: 0.5rem; /* More space below heading */
+}
+.timeline-item .timeline-text p {
+    font-size: 1.125rem;
+    font-weight: 300;
+    color: #4a5568;
+}
+
+/* Right side timeline items */
+.right-timeline-item {
+    justify-content: flex-end; /* Push content-wrapper to the right of the timeline */
+}
+.right-timeline-item .timeline-content-wrapper {
+    margin-left: 4rem; /* Space from the center line */
+    flex-direction: row; /* Icon/Image on left, text on right */
+}
+.right-timeline-item .timeline-icon,
+.right-timeline-item .timeline-image {
+    margin-right: 1.5rem; /* Space between icon/image and text */
+}
+.right-timeline-item .timeline-text {
+    text-align: left; /* Text aligns left within its space */
+}
+
+
+/* Left side timeline items */
+.left-timeline-item {
+    justify-content: flex-start; /* Push content-wrapper to the left of the timeline */
+}
+.left-timeline-item .timeline-content-wrapper {
+    margin-right: 4rem; /* Space from the center line */
+    flex-direction: row; /* Icon/Image on left, text on right (standard flex flow) */
+}
+.left-timeline-item .timeline-icon,
+.left-timeline-item .timeline-image {
+    margin-right: 1.5rem; /* Space between icon/image and text */
+}
+.left-timeline-item .timeline-text {
+    text-align: left; /* Text aligns left within its space */
+}
+
+
+/* Responsive adjustments for timeline */
+@media (max-width: 768px) {
+    .timeline-wrap {
+        padding: 0;
+        min-height: auto;
+    }
+
+    .timeline-line {
+        left: 20px; /* Move vertical line to the left for mobile */
+        transform: translateX(0);
+    }
+
+    .timeline-item {
+        flex-direction: row;
+        align-items: flex-start;
+        margin-bottom: 3rem; /* Adjusted margin for mobile */
+        padding-left: 60px; /* Space for the line and circle */
+        justify-content: flex-start;
+        min-height: auto; /* Allow height to adjust */
+    }
+
+    .timeline-item .timeline-circle {
+        left: 6px;
+        top: 1rem; /* Align with content start */
+        transform: translateY(0);
+        width: 2rem; /* Revert circle size for mobile */
+        height: 2rem;
+    }
+    .timeline-item .timeline-circle h1 {
+        font-size: 1.125rem; /* Revert number size for mobile */
+    }
+
+    /* Reset content wrappers for mobile to behave similarly */
+    .timeline-item .timeline-content-wrapper {
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        flex-direction: row; /* Changed to row for text on right */
+        align-items: center; /* Vertically center content */
+        text-align: left;
+        padding: 1rem; /* Smaller padding for mobile */
+        flex-wrap: nowrap; /* Prevent wrapping within the content wrapper */
+        justify-content: flex-start; /* Align content to the start */
+    }
+
+    .timeline-item .timeline-icon,
+    .timeline-item .timeline-image {
+        font-size: 4rem; /* Smaller icons for mobile */
+        max-width: 180px; /* Even Increased image size for mobile */
+        height: auto; /* Ensure aspect ratio is maintained */
+        flex-shrink: 0; /* Prevent the image/icon from shrinking */
+        margin-right: 1rem; /* Added margin to the right of image/icon */
+        margin-bottom: 0; /* Removed margin-bottom */
+    }
+    .timeline-item .timeline-text {
+        flex-grow: 1; /* Allow text to take remaining space */
+        text-align: left;
+        margin-right: 0;
+        margin-left: 0;
+        order: unset; /* Reset order for mobile */
+        min-width: 0; /* Allow text to shrink if necessary, preventing overflow */
+    }
+
+    /* Ensure consistent left alignment for all items on mobile */
+    .right-timeline-item, .left-timeline-item {
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+}
+
+
+/* --- About Me Section --- */
+.about-me-section {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+    background-color: var(--color-light-grey); /* A light grey background */
+    position: relative;
+    z-index: 46; /* Ensure it's above the fixed hero content */
+}
+@media (min-width: 768px) {
+    .about-me-section {
+        padding-top: 6rem;
+        padding-bottom: 6rem;
+    }
+}
+
+.about-me-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.about-me-content p {
+    font-size: 1.125rem; /* text-lg */
+    line-height: 1.8;
+    color: #4a5568; /* gray-700 */
+    margin-bottom: 1.5rem; /* space-y-6 */
+}
+.about-me-content p:last-child {
+    margin-bottom: 0; /* No margin after the last paragraph */
+}
+
+
+/* --- Projects Section - Slider Styles --- */
+.projects-section {
+    padding-top: 4rem; /* py-16 */
+    padding-bottom: 4rem; /* py-16 */
+    background-color: var(--color-light-grey); /* bg-gray-50 */
+    position: relative;
+    z-index: 46; /* Increased z-index to be above fixed-hero-content */
+}
+@media (min-width: 768px) {
+    .projects-section {
+        padding-top: 6rem; /* md:py-24 */
+        padding-bottom: 6rem; /* md:py-24 */
+    }
+}
+
+.slider-container {
+    position: relative;
+    max-width: 700px; /* Increased max-width for a larger slider */
+    margin: 0 auto; /* Center the slider */
+    overflow: hidden; /* Hide overflowing slides */
+    border-radius: 1rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.slider-wrapper {
+    display: flex;
+    transition: transform 0.5s ease-in-out; /* Smooth sliding transition */
+}
+
+.slider-slide {
+    min-width: 100%; /* Each slide takes full width of its container */
+    flex-shrink: 0; /* Prevent slides from shrinking */
+    padding: 1.5rem; /* Added padding to create space BETWEEN project cards */
+}
+
+.project-card-link {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-white);
+    border-radius: 0.75rem; /* rounded-lg */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05); /* Lighter shadow for cards within slider */
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+    height: 100%; /* Ensure cards fill the slide height */
+}
+.project-card-link:hover {
+    transform: scale(1.02); /* Slightly less aggressive hover for slider cards */
+}
+
+.project-card-image {
+    width: 100%;
+    height: 15rem; /* Increased height for larger images */
+    object-fit: cover; /* object-cover (for placeholder images) */
+}
+
+.project-card-image.grocerie-image {
+    object-fit: cover; /* Make sure it covers the entire area */
+}
+
+.project-card-content {
+    padding: 2rem; /* Increased padding inside project cards */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.project-card-title {
+    font-size: 1.25rem; /* text-xl */
+    font-weight: 700; /* font-bold */
+    color: var(--color-dark-grey);
+    margin-bottom: 0.75rem; /* mb-3 */
+}
+.project-card-title .icon-desktop,
+.project-card-title .icon-chart-line,
+.project-card-title .icon-mobile {
+    margin-left: 0.5rem; /* ml-2 */
+    color: #4a5568; /* gray-700 */
+}
+
+.project-card-description {
+    font-size: 1rem; /* text-base */
+    color: #4a5568; /* gray-700 */
+    margin-bottom: 1rem; /* mb-4 */
+}
+
+.project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem; /* gap-2 */
+    margin-bottom: 1rem; /* mb-4 */
+}
+.tag {
+    background-color: #e2e8f0; /* gray-200 */
+    color: #1f2937; /* gray-800 */
+    font-size: 0.75rem; /* text-xs */
+    font-weight: 600; /* font-semibold */
+    padding: 0.25rem 0.625rem; /* px-2.5 py-0.5 */
+    border-radius: 9999px; /* rounded-full */
+    display: inline-flex;
+    align-items: center;
+}
+.tag i {
+    margin-left: 0.25rem; /* ml-1 */
+}
+
+.project-links-container { /* This container is now empty in HTML, but keeping styles just in case */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto; /* Pushes links to the bottom of the card */
+}
+.project-link {
+    color: #4a5568; /* gray-700 */
+    font-weight: 600; /* font-semibold */
+    font-size: 0.875rem; /* text-sm */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+.project-link:hover {
+    color: var(--color-black);
+}
+.project-link i {
+    margin-left: 0.25rem; /* ml-1 */
+}
+
+/* Slider Navigation Buttons */
+.slider-nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    padding: 0.8rem 0.5rem;
+    cursor: pointer;
+    font-size: 1.5rem;
+    z-index: 10;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.slider-nav-button:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.slider-nav-button.prev {
+    left: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.slider-nav-button.next {
+    right: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+/* Slider Pagination Dots */
+.slider-pagination {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 0.5rem;
+    z-index: 10;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.dot.active {
+    background-color: var(--color-green-accent); /* Active dot color */
+    transform: scale(1.2);
+}
+
+/* Responsive adjustments for slider */
+@media (max-width: 768px) {
+    .slider-container {
+        max-width: 350px; /* Slightly larger max-width for mobile */
+    }
+    .slider-slide {
+        padding: 1rem; /* Adjust padding for mobile */
+    }
+    .project-card-content {
+        padding: 1.5rem; /* Adjust padding inside card for mobile */
+    }
+    .project-card-image {
+        height: 12rem; /* Revert image height for mobile */
+    }
+    .slider-nav-button {
+        padding: 0.6rem 0.4rem;
+        font-size: 1.2rem;
+    }
+    .dot {
+        width: 8px;
+        height: 8px;
+    }
+}
+
+
+/* --- Contact Section --- */
+.contact-section {
+    padding-top: 3rem; /* py-12 */
+    padding-bottom: 0; /* pb-0 */
+    background-color: var(--opacity-blur-bg); /* Uses updated opacity */
+    position: relative;
+    z-index: 46; /* Increased z-index to be above fixed-hero-content */
+    color: var(--color-white);
+}
+@media (min-width: 768px) {
+    .contact-section {
+        padding-top: 4rem; /* md:py-16 */
+    }
+}
+
+.contact-title {
+    font-size: 2.25rem; /* text-3xl */
+    font-weight: 700; /* font-bold */
+    margin-bottom: 1.5rem; /* mb-6 */
+}
+@media (min-width: 768px) {
+    .contact-title {
+        font-size: 2.5rem; /* md:text-4xl */
+    }
+}
+.contact-title .icon-envelope {
+    margin-left: 0.5rem; /* ml-2 */
+}
+
+.contact-description {
+    font-size: 1.125rem; /* text-lg */
+    margin-bottom: 1.5rem; /* Reduced margin-bottom from 2.5rem to 1.5rem */
+}
+
+.contact-buttons {
+    display: flex;
+    flex-direction: column; /* flex-col */
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem; /* gap-6 */
+    padding-bottom: 0; /* Removed padding at the bottom */
+}
+@media (min-width: 768px) {
+    .contact-buttons {
+        flex-direction: row; /* md:flex-row */
+    }
+}
+
+.button {
+    display: inline-block;
+    padding: 0.75rem 2rem; /* px-8 py-3 */
+    border-radius: 9999px; /* rounded-full */
+    font-size: 1.125rem; /* text-lg */
+    font-weight: 600; /* font-semibold */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+.button i {
+    margin-left: 0.5rem; /* ml-2 */
+}
+
+.button-primary {
+    background-color: var(--color-white);
+    color: var(--color-black);
+}
+.button-primary:hover {
+    background-color: #f3f4f6; /* hover:bg-gray-100 */
+    transform: scale(1.05);
+}
+
+.button-secondary {
+    background-color: transparent;
+    border: 2px solid var(--color-white);
+    color: var(--color-white);
+}
+.button-secondary:hover {
+    background-color: var(--color-white);
+    color: var(--color-black);
+    transform: scale(1.05);
+}
+
+/* --- Footer --- */
+.footer {
+    background-color: var(--opacity-blur-bg); /* Uses updated opacity */
+    color: var(--color-white);
+    padding-top: 1rem; /* pt-0 from contact section, so add some padding here */
+    padding-bottom: 0; /* Changed from 1rem to 0 */
+    text-align: center;
+    font-size: 0.875rem; /* text-sm */
+    position: relative;
+    z-index: 46; /* Increased z-index to be above fixed-hero-content */
+}
+.footer-note {
+    margin-top: 0.5rem; /* mt-2 */
+}
+.footer-note span {
+    color: #9ca3af; /* gray-400 */
+}
+
+/* --- Resume Button --- */
+.resume-button {
+    position: fixed;
+    bottom: 1.5rem; /* bottom-6 */
+    left: 1.5rem; /* left-6 */
+    background-color: var(--opacity-blur-bg); /* Uses updated opacity */
+    color: var(--color-white);
+    padding: 0.75rem 1.5rem; /* px-6 py-3 */
+    border-radius: 9999px; /* rounded-full */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+    text-decoration: none;
+    transition: all 0.3s ease;
+    z-index: 50;
+}
+.resume-button:hover {
+    background-color: rgba(255, 255, 255, 0.5); /* hover:bg-white hover:bg-opacity-20 */
+    transform: scale(1.05);
+}
+.resume-button.dark-state {
+    background-color: var(--opacity-resume-btn-dark); /* Uses updated opacity */
+    color: var(--color-white); /* text-white */
+}
+
+/* --- Back to Top Button --- */
+.back-to-top-button {
+    position: fixed;
+    bottom: 1.5rem; /* Matches resume button bottom */
+    right: 1.5rem; /* Position on the right */
+    background-color: var(--opacity-blur-bg); /* Use existing blurred background */
+    color: var(--color-white);
+    width: 3.5rem; /* Larger touch target */
+    height: 3.5rem; /* Larger touch target */
+    border-radius: 9999px; /* Fully circular */
+    display: flex; /* For centering icon */
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem; /* Icon size */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    text-decoration: none;
+    border: none; /* Remove default button border */
+    cursor: pointer;
+    opacity: 0; /* Hidden by default */
+    pointer-events: none; /* Disable clicks when hidden */
+    transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+    z-index: 55; /* Higher than resume button (z-index: 50) but lower than mobile menu overlay */
+}
+
+.back-to-top-button:hover {
+    background-color: rgba(255, 255, 255, 0.5); /* Hover effect */
+    transform: scale(1.05);
+}
+
+/* Class to make the button visible (added by JS) */
+.back-to-top-button.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Dark state for back-to-top button when overlapping white sections */
+.back-to-top-button.dark-state {
+    background-color: var(--opacity-dark-nav-bg); /* Darker background */
+    color: var(--color-white); /* White text/icon */
+}
+
+
+/* --- Keyframe Animations --- */
+@keyframes fadeInFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animate-fade-in-up {
+    animation: fadeInFromBottom 0.8s ease-out forwards;
+    opacity: 0; /* Start invisible */
+}
+
+.animate-fade-in-up.delay-200 {
+    animation-delay: 0.2s;
+}
+
+.animate-fade-in-up.delay-400 {
+    animation-delay: 0.4s;
+}
+
+/* Pulsing animation (not directly used in original, but good to have) */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.05);
+    }
+}
+
+/* New classes for fading elements (JS controlled) */
+.fade-out {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transition: opacity 0.5s ease-out;
+}
+
+.fade-in {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    transition: opacity 0.5s ease-in;
+}

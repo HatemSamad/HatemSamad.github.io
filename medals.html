@@ -3,42 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Medals</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Hatem Samad - My Medals & Achievements</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50%25' y='50%25' font-size='50' text-anchor='middle' dominant-baseline='central'%3EH%3C/text%3E%3C/svg%3E">
+    <!-- Google Font: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* Basic Resets */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f0f0f0;
-            color: #1a202c;
+            font-family: 'Outfit', sans-serif;
+            background-color: #f0f2f5; /* Light background similar to resume */
+            color: #333;
+            line-height: 1.6;
             display: flex;
-            flex-direction: column;
+            flex-direction: column; /* Allow content to stack vertically */
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 2rem;
+            padding: 2rem 1rem;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            position: relative; /* Needed for medal image positioning relative to body */
+        }
+
+        .medals-container {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 800px; /* Max width for content */
+            width: 100%;
+            padding: 2.5rem;
+            margin-top: 2rem; /* Space from the top */
+            text-align: center; /* Center text content */
+            position: relative; /* Keep relative for internal content */
+            z-index: 1; /* Ensure content is above the floating images */
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #1a202c;
+            margin-bottom: 1.5rem;
             text-align: center;
         }
-        .container {
-            background-color: #ffffff;
-            padding: 2rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            max-width: 800px;
-            width: 100%;
+
+        .medals-content p {
+            font-size: 1.15rem;
+            color: #555;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            text-align: justify; /* Justify text for a cleaner block */
+            text-align-last: center; /* Center the last line of justified text */
+        }
+
+        .medals-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .medals-content strong {
+            color: #1a202c; /* Make strong text stand out */
+        }
+
+        /* Medal Image Styling */
+        .medal-image {
+            position: absolute; /* Position relative to the body */
+            width: 250px; /* Increased size even more */
+            height: auto;
+            opacity: 0.7; /* Slightly transparent */
+            filter: drop-shadow(0 8px 15px rgba(0,0,0,0.3)); /* Stronger shadow */
+            z-index: 0; /* Behind content */
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .medal-image-left {
+            top: 5%; /* Adjust vertical position */
+            left: -50px; /* Brought closer */
+            transform: rotate(-25deg); /* More rotation */
+        }
+
+        .medal-image-right {
+            bottom: 5%; /* Adjust vertical position */
+            right: -50px; /* Brought closer */
+            transform: rotate(25deg); /* More rotation */
+        }
+        
+        .medal-image:hover {
+            opacity: 1;
+            transform: scale(1.05) rotate(var(--rotation, 0deg)); /* Scale on hover, maintain rotation */
+        }
+        .medal-image-left:hover {
+            --rotation: -25deg; /* Define variable for left rotation */
+        }
+        .medal-image-right:hover {
+            --rotation: 25deg; /* Define variable for right rotation */
+        }
+
+
+        .back-button {
+            display: inline-block;
+            background-color: #000000;
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-size: 1rem;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 2rem;
+        }
+        .back-button:hover {
+            background-color: #374151;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            .medals-container {
+                padding: 1.5rem;
+                margin-top: 1rem;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .medals-content p {
+                font-size: 1rem;
+                text-align: left; /* Revert to left align for smaller screens */
+                text-align-last: left;
+            }
+            .back-button {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+            .medal-image {
+                width: 150px; /* Adjusted smaller on mobile */
+                /* If they clutter too much, uncomment the line below to hide them on mobile */
+                /* display: none; */
+            }
+            .medal-image-left {
+                left: -75px; /* Adjusted for mobile */
+                top: 5%;
+                transform: rotate(-15deg);
+            }
+            .medal-image-right {
+                right: -75px; /* Adjusted for mobile */
+                bottom: 5%;
+                transform: rotate(15deg);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="text-4xl md:text-5xl font-bold mb-4 text-gray-800">My Medals & Achievements</h1>
-        <p class="text-lg text-gray-700 mb-8">
-            This page showcases my various medals and achievements.
-            You can add details, images, or a gallery of your medals here!
-        </p>
-        <a href="index.html" class="inline-block bg-black text-white px-6 py-3 rounded-full text-lg font-semibold shadow-lg hover:bg-gray-800 transition duration-300">
-            Go Back to Portfolio
-        </a>
+    <div class="medals-container">
+        <h1>My Medals & Achievements</h1>
+        <div class="medals-content">
+            <p>I have participated in many competitions in my life. This stage started a couple of years ago when I began to enjoy sports. Since then, I have joined **8 races**, including half marathons and 10-day challenges.</p>
+            <p>Additionally, I joined a **Math Olympiad**, successfully winning the competition. I also participated in a **chess tournament** with only two weeks of training, showcasing my quick learning and competitive spirit.</p>
+        </div>
+        <a href="index.html" class="back-button">Go Back to Portfolio</a>
     </div>
+    <img src="png/medal1.png" alt="Medal 1" class="medal-image medal-image-left">
+    <img src="png/medal2.png" alt="Medal 2" class="medal-image medal-image-right">
 </body>
 </html>

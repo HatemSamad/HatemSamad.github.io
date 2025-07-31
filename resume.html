@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hatem Samad - Resume</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext x='50%25' y='50%25' font-size='50' text-anchor='middle' dominant-baseline='central'%3EH%3C/text%3E%3C/svg%3E">
+    <!-- Google Font: Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Basic Resets */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            /* Background color removed as it will be handled by slideshow-background */
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to top */
+            min-height: 100vh;
+            padding: 2rem 1rem; /* Padding around the resume card */
+            position: relative; /* Needed for z-index context if body is parent of slideshow */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        /* Slideshow Background */
+        #slideshow-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: opacity 1s ease-in-out; /* Smooth fade transition */
+            filter: brightness(0.6) blur(5px); /* Darken and blur the background images */
+            z-index: -1; /* Place it behind all other content */
+            opacity: 0; /* Start hidden, will fade in with JS */
+        }
+
+        .resume-container {
+            background-color: rgba(255, 255, 255, 0.8); /* Lowered opacity to 80% */
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 100%;
+            padding: 2.5rem;
+            margin-top: 2rem; /* Space from the top */
+            position: relative; /* Ensure it stays above the background */
+            z-index: 1; /* Keep resume content above the background */
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #1a202c;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.8rem 1.5rem;
+            color: #555;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .contact-info a {
+            color: #555;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .contact-info a:hover {
+            color: #000;
+        }
+
+        .contact-info i {
+            margin-right: 0.5rem;
+            color: #777;
+        }
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a202c;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #eee;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin-top: 1.5rem;
+            margin-bottom: 0.4rem;
+        }
+
+        p {
+            font-size: 1rem;
+            color: #555;
+            margin-bottom: 0.8rem;
+        }
+
+        ul {
+            list-style: none;
+            margin-left: 0;
+            padding-left: 0;
+            margin-bottom: 1rem;
+        }
+
+        ul li {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            position: relative;
+            padding-left: 1.5rem;
+            color: #555;
+        }
+
+        ul li::before {
+            content: "\f00c"; /* Font Awesome checkmark icon */
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            color: #22c55e; /* Green color for bullet */
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+
+        .section-content {
+            margin-bottom: 2rem;
+        }
+
+        .experience-item, .project-item, .education-item {
+            margin-bottom: 1.5rem;
+            padding-left: 1rem;
+            border-left: 3px solid #e2e8f0;
+        }
+
+        .experience-item:last-child, .project-item:last-child, .education-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .date-range {
+            font-size: 0.9rem;
+            color: #777;
+            font-style: italic;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .project-item a {
+            color: #007bff;
+            text-decoration: underline;
+        }
+
+        .project-item a:hover {
+            color: #0056b3;
+        }
+
+        .back-button {
+            display: inline-block;
+            background-color: #000000;
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px;
+            font-size: 1rem;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 2rem;
+            margin-left: auto;
+            margin-right: auto;
+            display: block; /* Center the button */
+            width: fit-content; /* Make button only as wide as its content */
+        }
+        .back-button:hover {
+            background-color: #374151;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            .resume-container {
+                padding: 1.5rem;
+                margin-top: 1rem;
+            }
+            h1 {
+                font-size: 2.2rem;
+            }
+            .contact-info {
+                flex-direction: column;
+                gap: 0.5rem;
+                font-size: 0.9rem;
+            }
+            h2 {
+                font-size: 1.6rem;
+                margin-top: 2rem;
+            }
+            h3 {
+                font-size: 1.1rem;
+            }
+            p, ul li {
+                font-size: 0.9rem;
+            }
+            ul li::before {
+                font-size: 0.9rem;
+                top: 2px;
+            }
+            .experience-item, .project-item, .education-item {
+                padding-left: 0.8rem;
+            }
+            .back-button {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="slideshow-background"></div>
+
+    <div class="resume-container">
+        <h1>Hatem Samad</h1>
+        <div class="contact-info">
+            <a href="mailto:hatemanassamad@gmail.com"><i class="fas fa-envelope"></i> hatemanassamad@gmail.com</a>
+            <a href="https://instagram.com/h_alsamad" target="_blank"><i class="fab fa-instagram"></i> Instagram</a>
+            <a href="https://github.com/HatemSamad" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+        </div>
+
+        <div class="section-content">
+            <h2>Summary</h2>
+            <p>Multi-skilled person who is interested in many aspects of life, showing my interest in content creation, going into the depths of film making, and enjoying the fun of being able to create endless sites with pure imagination and ability to code.</p>
+        </div>
+
+        <div class="section-content">
+            <h2>Experience</h2>
+            <div class="experience-item">
+                <h3>Content Creator</h3>
+                <p><strong>YouTube</strong> | Self-Employed | [Start Date] – Present</p>
+                <ul>
+                    <li>Produced, directed, and edited a diverse range of video content, successfully building an audience of **[X,000+] subscribers** and generating **[Y Million+] views**.</li>
+                    <li>Managed all aspects of video production, including **concept development, scriptwriting, filming, sound design, motion graphics, and post-production**.</li>
+                    <li>Developed strong **storytelling, visual communication, and audience engagement strategies**.</li>
+                    <li>Utilized analytics to inform content decisions and optimize performance.</li>
+                </ul>
+            </div>
+            <div class="experience-item">
+                <h3>Film Production Assistant</h3>
+                <p><strong>[Company Name/Project Name, e.g., Integrity Films Production]</strong> | [City, Country] | [Start Date] – [End Date]</p>
+                <ul>
+                    <li>Provided comprehensive support across various stages of film production, ensuring smooth operations on set.</li>
+                    <li>Gained hands-on experience with professional **camera equipment, lighting setups, and audio recording devices**.</li>
+                    <li>Collaborated effectively with directors, cinematographers, and crew members to execute creative visions.</li>
+                    <li>Assisted with logistics, scheduling, and equipment management, demonstrating strong organizational skills.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section-content">
+            <h2>Projects</h2>
+            <div class="project-item">
+                <h3>Grocerie</h3>
+                <p><strong>Flutter, Android, Gemini</strong> | Google AI Challenge Project</p>
+                <ul>
+                    <li>Developed "Grocerie," a mobile shopping co-pilot designed to help users save money by comparing prices.</li>
+                    <li>Integrated **Gemini AI** for intelligent price analysis and user assistance features.</li>
+                    <li>Built with **Flutter** for cross-platform compatibility, ensuring a seamless user experience on Android devices.</li>
+                    <li>Demonstrated proficiency in mobile app development, API integration, and user-centric design.</li>
+                </ul>
+            </div>
+            <div class="project-item">
+                <h3>Gam3a</h3>
+                <p><strong>HTML, CSS, JavaScript</strong> | Educational Trivia Game</p>
+                <ul>
+                    <li>Created "Gam3a," an interactive web-based trivia game aimed at assisting students with their studies.</li>
+                    <li>Designed and implemented a responsive user interface using **HTML and CSS**.</li>
+                    <li>Developed core game logic and dynamic content loading with **JavaScript**.</li>
+                    <li>Showcased front-end development skills and the ability to create engaging educational tools.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section-content">
+            <h2>Skills</h2>
+            <ul>
+                <li><strong>Technical:</strong> Video Editing (Adobe Premiere Pro, DaVinci Resolve, CapCut), Graphic Design (Adobe Photoshop), Web Development (HTML, CSS, JavaScript, Flutter), AI/ML Concepts (Gemini API), Microsoft Office Suite.</li>
+                <li><strong>Creative:</b> Storytelling, Scriptwriting, Cinematography, Photography, Visual Communication, Content Strategy, Digital Art.</li>
+                <li><strong>Soft Skills:</strong> Problem-Solving, Adaptability, Teamwork & Collaboration, Communication (Verbal & Written), Time Management, Critical Thinking, Project Coordination.</li>
+                <li><strong>Languages:</strong> English (Fluent), Arabic (Native)</li>
+            </ul>
+        </div>
+
+        <div class="section-content">
+            <h2>Education</h2>
+            <div class="education-item">
+                <h3>Bachelor of Science in Computer Science</h3>
+                <p><strong>Sunway University</strong> | Petaling Jaya, Malaysia | <span class="date-range">2024 – 2027 (Expected)</span></p>
+                <ul>
+                    <li>Relevant Coursework: Computer Science Fundamentals, Web Development Principles, Database Management</li>
+                </ul>
+            </div>
+            <div class="education-item">
+                <h3>High School Diploma</h3>
+                <p><strong>Ajial Bilingual School</strong> | Kuwait City, Kuwait | <span class="date-range">2021 – 2024</span></p>
+            </div>
+            <div class="education-item">
+                <h3>High School Studies</h3>
+                <p><strong>New Pakistan International School</strong> | Kuwait City, Kuwait | <span class="date-range">2018 – 2020</span></p>
+            </div>
+            <div class="education-item">
+                <h3>Middle School Studies</h3>
+                <p><strong>Oxford English School</strong> | Kuwait City, Kuwait | <span class="date-range">2016 – 2018</span></p>
+            </div>
+            <div class="education-item">
+                <h3>Middle School Studies</h3>
+                <p><strong>The English Academy</strong> | Kuwait City, Kuwait | <span class="date-range">2014 – 2016</span></p>
+            </div>
+            <div class="education-item">
+                <h3>Elementary School Studies</h3>
+                <p><strong>Kuwait International English School</strong> | Kuwait City, Kuwait | <span class="date-range">2009 – 2013</span></p>
+            </div>
+        </div>
+
+        <a href="index.html" class="back-button">Go Back to Portfolio</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slideshowBackground = document.getElementById('slideshow-background');
+            const images = [
+                'png/HatemPicture111.jpg',
+                'png/HatemSpacepic.jpg',
+                'png/HatemGradpic.jpg',
+                'png/Hatembuggypic.jpg',
+                'png/HatemCampic.jpg'
+            ];
+            let currentImageIndex = 0;
+
+            // Preload images
+            images.forEach(src => {
+                const img = new Image();
+                img.src = src;
+                img.onerror = () => console.error(`Failed to load background image: ${src}`);
+            });
+
+            function changeBackgroundImage() {
+                // Fade out current image
+                slideshowBackground.style.opacity = 0;
+
+                setTimeout(() => {
+                    // Update background image source
+                    slideshowBackground.style.backgroundImage = `url('${images[currentImageIndex]}')`;
+                    
+                    // Fade in new image
+                    slideshowBackground.style.opacity = 1;
+
+                    // Move to the next image
+                    currentImageIndex = (currentImageIndex + 1) % images.length;
+                }, 1000); // Wait for fade-out (1s) before changing image and fading in
+            }
+
+            // Initial background set
+            changeBackgroundImage();
+
+            // Change image every 5 seconds (5000ms)
+            setInterval(changeBackgroundImage, 5000);
+        });
+    </script>
+</body>
+</html>

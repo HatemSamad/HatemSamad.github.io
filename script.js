@@ -1,305 +1,98 @@
-// This file is currently empty, but can be used for any general JavaScript
-// functionality for your portfolio that is not directly related to ColorThief.
-// For example, mobile menu toggling logic could go here.
+// script.js
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Mobile menu toggle logic
+    // --- Global Element References ---
     const mobileMenuButton = document.getElementById('mobile-menu-button');
     const closeMobileMenuButton = document.getElementById('close-mobile-menu');
     const mobileMenu = document.getElementById('mobile-menu');
-
-    // ColorThief script block
-    const imageUrl = 'HatemPicture111.jpg'; // The URL of your background image
-    const colorThief = new ColorThief();
-    const tempImage = new Image();
-    tempImage.crossOrigin = 'Anonymous'; // Important for CORS if image is not on the same domain
-    tempImage.src = imageUrl;
-
-    tempImage.onload = function() {
-        try {
-            const dominantColor = colorThief.getColor(tempImage);
-            console.log('Dominant Color (RGB):', dominantColor);
-        } catch (error) {
-            console.error('Error extracting dominant color:', error);
-        }
-    };
-
-    tempImage.onerror = function() {
-        console.error('Failed to load image for ColorThief:', imageUrl);
-    };
-
-    // Paper airplane scroll animation logic
-    const experienceSection = document.getElementById('experience');
-    const paperAirplane1 = document.getElementById('paper-airplane'); // Original plane
-    const paperAirplane2 = document.getElementById('paper-airplane-2'); // New plane
-
-    // Get references to the hero description and button
+    const nav = document.getElementById('main-nav');
+    const navBrandName = nav ? nav.querySelector('.nav-brand') : null; // Get the "Hatem Samad" brand name link
     const heroDescription = document.getElementById('heroDescription');
     const viewWorkButton = document.getElementById('viewWorkButton');
+    const experienceSection = document.getElementById('experience');
+    const projectsSectionEl = document.getElementById('projects');
+    const resumeButton = document.getElementById('resume-button');
+    const fixedHeroContent = document.getElementById('fixedHeroContent');
+    const heroBackground = document.getElementById('heroBackground');
+    const hatemPic = fixedHeroContent ? fixedHeroContent.querySelector('img[alt="Hatem Samad Transparent"]') : null;
+    const paperAirplane1 = document.getElementById('paper-airplane');
+    const paperAirplane2 = document.getElementById('paper-airplane-2');
+    const backToTopButton = document.getElementById('backToTopButton'); // Back to Top Button reference
 
-    // Set initial state for hero description and button (visible)
-    if (heroDescription) heroDescription.classList.add('fade-in');
-    if (viewWorkButton) viewWorkButton.classList.add('fade-in');
+    // Slider elements
+    const sliderWrapper = document.getElementById('projects-slider-wrapper');
+    const sliderPrevBtn = document.getElementById('slider-prev');
+    const sliderNextBtn = document.getElementById('slider-next');
+    const sliderPagination = document.getElementById('slider-pagination');
+    let slides = []; // Will be populated after DOM is ready
+    let currentSlideIndex = 0;
+    let startX = 0;
+    let endX = 0;
 
-
-    if (experienceSection && paperAirplane1 && paperAirplane2) {
-        window.addEventListener('scroll', function() {
-            const sectionRect = experienceSection.getBoundingClientRect();
-            const viewportHeight = window.innerHeight;
-
-            let scrollProgress = 0;
-
-            // To make the animation longer and start earlier, we adjust the scroll range
-            // The animation will now span over 2 times the section's height for a longer effect.
-            const animationScrollRange = experienceSection.offsetHeight * 2; 
-            scrollProgress = (window.scrollY - (experienceSection.offsetTop - viewportHeight)) / (animationScrollRange + viewportHeight);
-            scrollProgress = Math.max(0, Math.min(1, scrollProgress)); // Clamp between 0 and 1
-
-            const planeSize = 200; // Increased size of both airplanes
-            paperAirplane1.style.width = `${planeSize}px`;
-            paperAirplane1.style.height = `${planeSize}px`;
-            paperAirplane2.style.width = `${planeSize}px`;
-            paperAirplane2.style.height = `${planeSize}px`;
-
-            const sectionWidth = experienceSection.offsetWidth;
-            const sectionHeight = experienceSection.offsetHeight;
-
-            // --- Logic for Paper Airplane 1 (Original: Right to Left, -45deg tilt) ---
-            // Define the paper airplane's initial CSS position offsets (from right and top)
-            const initialPlane1OffsetX = 20; // From right
-            const initialPlane1OffsetY = 20; // From top
-
-            // Define desired STARTING absolute position of the airplane within the experience section
-            const desiredStartAbsoluteX1 = sectionWidth - planeSize - 100; // 100px from right edge
-            const desiredStartAbsoluteY1 = 50; // 50px from top edge
-
-            // Define desired ENDING absolute position of the airplane within the experience section
-            const targetElement1 = document.querySelector('.left-timeline img[src="laptoppicdrawing.png"]');
-            let desiredEndAbsoluteX1 = 100; // Default to 100px from left edge
-            let desiredEndAbsoluteY1 = sectionHeight - planeSize - 50; // Default to bottom left if target not found
-
-            if (targetElement1) {
-                const targetRect1 = targetElement1.getBoundingClientRect();
-                const experienceRect = experienceSection.getBoundingClientRect();
-                const targetRelativeTop1 = targetRect1.top - experienceRect.top;
-                const targetRelativeLeft1 = targetRect1.left - experienceRect.left;
-                desiredEndAbsoluteX1 = targetRelativeLeft1 - planeSize / 2 - 20;
-                desiredEndAbsoluteY1 = targetRelativeTop1 - planeSize / 2 - 50;
-                desiredEndAbsoluteX1 = Math.max(20, desiredEndAbsoluteX1);
-                desiredEndAbsoluteY1 = Math.max(20, desiredEndAbsoluteY1);
-            }
-
-            // Calculate the current absolute position based on scroll progress
-            let currentAbsoluteX1 = desiredStartAbsoluteX1 + (desiredEndAbsoluteX1 - desiredStartAbsoluteX1) * scrollProgress;
-            let currentAbsoluteY1 = desiredStartAbsoluteY1 + (desiredEndAbsoluteY1 - desiredStartAbsoluteY1) * scrollProgress;
-
-            // Calculate the translate values needed from the *initial CSS position* (top:20px, right:20px)
-            let translateX1 = currentAbsoluteX1 - (sectionWidth - planeSize - initialPlane1OffsetX);
-            let translateY1 = currentAbsoluteY1 - initialPlane1OffsetY;
-
-            const fixedRotationZ1 = -45; // Fixed rotation for the tilt
-            paperAirplane1.style.transform = `translate(${translateX1}px, ${translateY1}px) rotateZ(${fixedRotationZ1}deg)`;
-
-
-            // --- Logic for Paper Airplane 2 (New: Left to Right, -45deg tilt, flipped) ---
-            // Define the paper airplane's initial CSS position offsets (from left and top)
-            const initialPlane2OffsetX = 20; // From left
-            const initialPlane2OffsetY = 20; // From top
-
-            const cinemaCameraElement = document.querySelector('.left-timeline img[src="CinemaCamera.png"]');
-            const medalsElement = document.querySelector('.right-timeline img[src="6medals.png"]');
-
-            let desiredStartAbsoluteX2 = 50; // Default start from left edge
-            let desiredStartAbsoluteY2 = 50; // Default start from top
-
-            if (cinemaCameraElement) {
-                const cinemaCameraRect = cinemaCameraElement.getBoundingClientRect();
-                const experienceRect = experienceSection.getBoundingClientRect();
-
-                // Start position: slightly to the right of cinema camera, and below it
-                desiredStartAbsoluteX2 = (cinemaCameraRect.left - experienceRect.left) + (cinemaCameraRect.width / 2) + 20; // 20px right of camera's center
-                desiredStartAbsoluteY2 = (cinemaCameraRect.top - experienceRect.top) + cinemaCameraRect.height + 30; // 30px below camera's bottom
-            }
-
-            let desiredEndAbsoluteX2 = sectionWidth - planeSize - 50; // 50px from right edge
-            let desiredEndAbsoluteY2 = desiredStartAbsoluteY2; // Keep same vertical level initially
-
-            if (medalsElement) {
-                const medalsRect = medalsElement.getBoundingClientRect();
-                const experienceRect = experienceSection.getBoundingClientRect();
-
-                // End position: under the medals image
-                desiredEndAbsoluteX2 = (medalsRect.left - experienceRect.left) + (medalsRect.width / 2) - (planeSize / 2); // Centered horizontally with medals
-                desiredEndAbsoluteY2 = (medalsRect.top - experienceRect.top) + medalsRect.height + 30; // 30px below medals' bottom
-            }
-
-            let currentAbsoluteX2 = desiredStartAbsoluteX2 + (desiredEndAbsoluteX2 - desiredStartAbsoluteX2) * scrollProgress;
-            let currentAbsoluteY2 = desiredStartAbsoluteY2 + (desiredEndAbsoluteY2 - desiredStartAbsoluteY2) * scrollProgress;
-
-            // Calculate translate values for plane 2 from its assumed initial CSS position (top:20px, left:20px)
-            let translateX2 = currentAbsoluteX2 - initialPlane2OffsetX;
-            let translateY2 = currentAbsoluteY2 - initialPlane2OffsetY;
-
-            const fixedRotationZ2 = -45; // Changed to -45 degrees tilt
-            const flipY2 = 180; // Horizontal flip (180 degrees around Y-axis)
-
-            paperAirplane2.style.transform = `translate(${translateX2}px, ${translateY2}px) rotateY(${flipY2}deg) rotateZ(${fixedRotationZ2}deg)`;
+    // --- Mobile Menu Toggle Logic ---
+    if (mobileMenuButton && mobileMenu && closeMobileMenuButton) {
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.add('is-open'); // Add class to show menu
+            // When mobile menu is open, ensure the nav is visible (in its current state)
+            if (nav) nav.classList.remove('hidden-nav');
         });
 
-        // Trigger scroll event once on load to set initial position
-        window.dispatchEvent(new Event('scroll'));
+        closeMobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.remove('is-open'); // Remove class to hide menu
+            // After closing mobile menu, if not at top, hide nav after a short delay
+            if (window.scrollY > 0 && nav) {
+                scrollTimeoutId = setTimeout(hideNavCompletely, 500); // Short delay for hiding after menu close
+            }
+        });
+
+        // Close mobile menu when a link is clicked
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', function() {
+                mobileMenu.classList.remove('is-open');
+                if (window.scrollY > 0 && nav) {
+                    scrollTimeoutId = setTimeout(hideNavCompletely, 500);
+                }
+            });
+        });
     }
 
-    // Navigation bar hide/show and resize/reposition on scroll logic
-    const nav = document.querySelector('nav');
-    // Ensure the nav element has an ID for easier selection if not already present in index.html
-    if (!nav.id) {
-        nav.id = 'main-nav';
-    }
-
-    // Get the "Hatem Samad" brand name link
-    const navBrandName = nav.querySelector('a[href="#hero"]');
-
-    // Define classes for the default (full) and compact states
-    const navDefaultClasses = ['max-w-5xl', 'left-1/2', '-translate-x-1/2', 'top-4'];
-    // Increased top-position (top-20) and adjusted right-position (right-8) for compact state
-    // Added text-sm for smaller font size in compact state
-    const navCompactClasses = ['max-w-xs', 'right-8', 'top-20', 'text-sm']; 
-    const navHiddenClass = '-translate-y-full'; // Class to completely hide the nav
-
-    let lastScrollY = window.scrollY; // Re-initialize lastScrollY here if it was only for trail dots
+    // --- Navigation Bar Hide/Show and Resize/Reposition Logic ---
+    let lastScrollY = window.scrollY;
     let scrollTimeoutId = null;
     const scrollThreshold = 50; // How many pixels to scroll before action
 
     // Function to apply the full-size navigation bar state
     function applyFullNavState() {
-        nav.classList.remove(...navCompactClasses, navHiddenClass);
-        nav.classList.add(...navDefaultClasses);
-        // Ensure text size for links reverts to default if needed (Tailwind default is base)
+        if (!nav) return;
+        nav.classList.remove('hidden-nav'); // Only remove hidden-nav
+        // Ensure text size for links reverts to default if needed
         nav.querySelectorAll('a').forEach(link => {
-            link.classList.remove('text-sm');
-            link.classList.add('text-lg'); // Assuming default link size is text-lg
+            link.style.fontSize = ''; // Remove inline style
         });
         if (navBrandName) {
-            navBrandName.classList.remove('hidden'); // Show "Hatem Samad"
+            navBrandName.style.display = 'flex'; // Show "Hatem Samad"
         }
     }
 
-    // Function to apply the compact navigation bar state
-    function applyCompactNavState() {
-        nav.classList.remove(...navDefaultClasses, navHiddenClass);
-        nav.classList.add(...navCompactClasses);
-        // Apply smaller text size to links within the nav
-        nav.querySelectorAll('a').forEach(link => {
-            link.classList.remove('text-lg'); // Remove default link size
-            link.classList.add('text-sm');
-        });
-        if (navBrandName) {
-            navBrandName.classList.add('hidden'); // Hide "Hatem Samad"
-        }
-    }
-
-    // Function to completely hide the navigation bar
+    // Function to completely hide the navigation bar (now only fades)
     function hideNavCompletely() {
-        nav.classList.add(navHiddenClass);
-        // When completely hidden, ensure it's in the compact state for next appearance
-        // This ensures that when it reappears (even from hidden), it's in the compact state if not at top.
-        applyCompactNavState(); 
-        nav.classList.add(navHiddenClass); // Re-add hidden class to actually hide it
+        if (!nav) return;
+        nav.classList.add('hidden-nav');
     }
 
     // Initial state setup on page load
-    if (lastScrollY === 0) {
-        applyFullNavState();
-    } else {
-        applyCompactNavState();
-        hideNavCompletely(); // Start hidden if not at top
+    if (nav) {
+        if (lastScrollY === 0) {
+            applyFullNavState();
+        } else {
+            hideNavCompletely(); // Start hidden if not at top
+        }
     }
 
-    // Event listener for scroll
-    window.addEventListener('scroll', function() {
-        const currentScrollY = window.scrollY;
-
-        // Clear any existing timeout for hiding the nav
-        clearTimeout(scrollTimeoutId);
-
-        if (currentScrollY === 0) {
-            // At the very top: full size, centered, visible
-            applyFullNavState();
-            // Show hero description and button
-            if (heroDescription) heroDescription.classList.remove('fade-out');
-            if (viewWorkButton) viewWorkButton.classList.remove('fade-out');
-            if (heroDescription) heroDescription.classList.add('fade-in');
-            if (viewWorkButton) viewWorkButton.classList.add('fade-in');
-
-        } else if (currentScrollY < lastScrollY) {
-            // Scrolling up, but not at the very top: smaller, right, visible
-            applyCompactNavState();
-            // Show hero description and button
-            if (heroDescription) heroDescription.classList.remove('fade-out');
-            if (viewWorkButton) viewWorkButton.classList.remove('fade-out');
-            if (heroDescription) heroDescription.classList.add('fade-in');
-            if (viewWorkButton) viewWorkButton.classList.add('fade-in');
-
-        } else if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold) {
-            // Scrolling down and past threshold: hide completely
-            hideNavCompletely();
-            // Hide hero description and button
-            if (heroDescription) heroDescription.classList.remove('fade-in');
-            if (viewWorkButton) viewWorkButton.classList.remove('fade-in');
-            if (heroDescription) heroDescription.classList.add('fade-out');
-            if (viewWorkButton) viewWorkButton.classList.add('fade-out');
-        }
-
-        // Set a timeout to hide the nav if scrolling stops (only if not at top)
-        if (currentScrollY !== 0) {
-            scrollTimeoutId = setTimeout(hideNavCompletely, 3000); // Hide after 3 seconds of no scrolling
-        }
-
-        lastScrollY = currentScrollY;
-
-        // Call the overlap check for the nav bar
-        checkNavBarOverlap();
-
-        // Motion blur effect for experience section
-        const fixedHeroContent = document.getElementById('fixedHeroContent');
-        if (experienceSection) {
-            const sectionRect = experienceSection.getBoundingClientRect();
-            const viewportHeight = window.innerHeight;
-            const maxBlurExperience = 10; // Lowered max blur for experience section
-
-            // Calculate blur amount: max blur when section.top is at viewport bottom, 0 when section.top is at viewport top
-            let blurValue = 0;
-            if (sectionRect.top < viewportHeight && sectionRect.bottom > 0) {
-                // Calculate progress from bottom of viewport to top of viewport
-                let progress = (viewportHeight - sectionRect.top) / viewportHeight;
-                progress = Math.max(0, Math.min(1, progress)); // Clamp between 0 and 1
-                blurValue = (1 - progress) * maxBlurExperience; // Invert progress for blur: max at start, min at end
-            }
-            experienceSection.style.filter = `blur(${blurValue}px)`;
-        }
-
-        // Motion blur effect for Hero section
-        if (fixedHeroContent) {
-            const heroRect = fixedHeroContent.getBoundingClientRect();
-            const maxBlurHero = 3; // Small amount of blur for hero section
-
-            let blurValueHero = 0;
-            // Apply blur as the hero section scrolls out of view (i.e., when its top goes negative)
-            if (heroRect.top < 0 && heroRect.bottom > 0) {
-                let progress = Math.abs(heroRect.top) / heroRect.height;
-                progress = Math.min(1, progress); // Clamp to 1
-                blurValueHero = progress * maxBlurHero; // Blur increases as it scrolls up
-            } else if (heroRect.bottom <= 0) {
-                blurValueHero = maxBlurHero; // Max blur when completely out of view
-            }
-            // Apply blur to the background image and transparent hatem pic within fixedHeroContent
-            const heroBackground = document.getElementById('heroBackground');
-            const hatemPic = fixedHeroContent.querySelector('img[src="hatemtransparentpic.png"]');
-            if (heroBackground) heroBackground.style.filter = `brightness(0.7) blur(${blurValueHero}px)`;
-            if (hatemPic) hatemPic.style.filter = `brightness(0.9) blur(${blurValueHero}px)`;
-        }
-    });
+    // --- Hero Section Text/Button Fade Logic ---
+    // Set initial state for hero description and button (visible)
+    if (heroDescription) heroDescription.classList.add('fade-in');
+    if (viewWorkButton) viewWorkButton.classList.add('fade-in');
 
     // Click event for "View My Work" button
     if (viewWorkButton) {
@@ -312,44 +105,13 @@ document.addEventListener('DOMContentLoaded', function() {
             if (viewWorkButton) viewWorkButton.classList.add('fade-out');
 
             // Scroll to the experience section
-            const experienceSection = document.getElementById('experience');
             if (experienceSection) {
                 experienceSection.scrollIntoView({ behavior: 'smooth' });
             }
         });
     }
 
-    // Mobile menu toggle logic
-    if (mobileMenuButton && mobileMenu && closeMobileMenuButton) {
-        mobileMenuButton.addEventListener('click', function() {
-            mobileMenu.classList.remove('-translate-x-full');
-            // When mobile menu is open, always show the nav (in its current state)
-            nav.classList.remove(navHiddenClass);
-        });
-
-        closeMobileMenuButton.addEventListener('click', function() {
-            mobileMenu.classList.add('-translate-x-full');
-            // After closing mobile menu, if not at top, hide nav after a short delay
-            if (window.scrollY > 0) {
-                scrollTimeoutId = setTimeout(hideNavCompletely, 500); // Short delay for hiding after menu close
-            }
-        });
-
-        // Close mobile menu when a link is clicked
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', function() {
-                mobileMenu.classList.add('-translate-x-full');
-                if (window.scrollY > 0) {
-                    scrollTimeoutId = setTimeout(hideNavCompletely, 500);
-                }
-            });
-        });
-    }
-
-    // Resume button visibility logic
-    const resumeButton = document.getElementById('resume-button');
-    const projectsSectionEl = document.getElementById('projects');
-
+    // --- Overlap Check Functions for Nav and Buttons ---
     function checkResumeButtonOverlap() {
         if (!resumeButton || !experienceSection || !projectsSectionEl) {
             return;
@@ -357,33 +119,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const resumeButtonRect = resumeButton.getBoundingClientRect();
         const experienceSectionRect = experienceSection.getBoundingClientRect();
-        const projectsSectionElRect = projectsSectionEl.getBoundingClientRect(); // Corrected variable name
+        const projectsSectionElRect = projectsSectionEl.getBoundingClientRect();
 
-        // Check if the resume button overlaps vertically with the experience section
         const overlapsExperience = (
             resumeButtonRect.bottom > experienceSectionRect.top &&
             resumeButtonRect.top < experienceSectionRect.bottom
         );
-
-        // Check if the resume button overlaps vertically with the projects section
         const overlapsProjects = (
-            resumeButtonRect.bottom > projectsSectionElRect.top && // Corrected variable name
-            resumeButtonRect.top < projectsSectionElRect.bottom // Corrected variable name
+            resumeButtonRect.bottom > projectsSectionElRect.top &&
+            resumeButtonRect.top < projectsSectionElRect.bottom
         );
 
-        // If it overlaps with either section, apply the darker style
         if (overlapsExperience || overlapsProjects) {
-            // Add darker classes and remove lighter ones
-            resumeButton.classList.remove('bg-white', 'bg-opacity-10', 'text-white');
-            resumeButton.classList.add('bg-gray-800', 'bg-opacity-50', 'text-white'); // Keeping text white for contrast on dark background
+            resumeButton.classList.add('dark-state');
         } else {
-            // Revert to original lighter classes
-            resumeButton.classList.remove('bg-gray-800', 'bg-opacity-50');
-            resumeButton.classList.add('bg-white', 'bg-opacity-10', 'text-white');
+            resumeButton.classList.remove('dark-state');
         }
     }
 
-    // New function to check overlap for the navigation bar
     function checkNavBarOverlap() {
         if (!nav || !experienceSection || !projectsSectionEl) {
             return;
@@ -391,35 +144,351 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const navRect = nav.getBoundingClientRect();
         const experienceSectionRect = experienceSection.getBoundingClientRect();
-        const projectsSectionElRect = projectsSectionEl.getBoundingClientRect(); // Corrected variable name
+        const projectsSectionElRect = projectsSectionEl.getBoundingClientRect();
 
         const overlapsExperience = (
             navRect.bottom > experienceSectionRect.top &&
             navRect.top < experienceSectionRect.bottom
         );
         const overlapsProjects = (
-            navRect.bottom > projectsSectionElRect.top && // Corrected variable name
-            navRect.top < projectsSectionElRect.bottom // Corrected variable name
+            navRect.bottom > projectsSectionElRect.top &&
+            navRect.top < projectsSectionElRect.bottom
         );
 
         const isOverlapping = overlapsExperience || overlapsProjects;
 
         if (isOverlapping) {
-            // Apply darker background to nav
-            nav.classList.remove('bg-white', 'bg-opacity-10');
-            nav.classList.add('nav-dark-state'); // Use the new CSS class for dark state
+            nav.classList.add('nav-dark-state');
         } else {
-            // Revert to original lighter background
             nav.classList.remove('nav-dark-state');
-            nav.classList.add('bg-white', 'bg-opacity-10');
         }
     }
 
-    // Attach the overlap checks to the scroll event
-    window.addEventListener('scroll', checkResumeButtonOverlap);
-    window.addEventListener('scroll', checkNavBarOverlap); // Add for nav bar
+    function checkBackToTopButtonOverlap() {
+        if (!backToTopButton || !experienceSection || !projectsSectionEl) {
+            return;
+        }
+
+        const buttonRect = backToTopButton.getBoundingClientRect();
+        const experienceSectionRect = experienceSection.getBoundingClientRect();
+        const projectsSectionElRect = projectsSectionEl.getBoundingClientRect();
+
+        const overlapsExperience = (
+            buttonRect.bottom > experienceSectionRect.top &&
+            buttonRect.top < experienceSectionRect.bottom
+        );
+        const overlapsProjects = (
+            buttonRect.bottom > projectsSectionElRect.top &&
+            buttonRect.top < projectsSectionElRect.bottom
+        );
+
+        if (overlapsExperience || overlapsProjects) {
+            backToTopButton.classList.add('dark-state');
+        } else {
+            backToTopButton.classList.remove('dark-state');
+        }
+    }
+
+    // --- Paper Airplane Scroll Animation Logic ---
+    if (experienceSection && paperAirplane1 && paperAirplane2) {
+        window.addEventListener('scroll', function() {
+            const sectionRect = experienceSection.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+
+            // Calculate scroll progress within the experience section
+            // 0 when the top of the section enters the viewport
+            // 1 when the bottom of the section leaves the viewport
+            const scrollStart = experienceSection.offsetTop - viewportHeight;
+            const scrollEnd = experienceSection.offsetTop + experienceSection.offsetHeight;
+            let scrollProgress = (window.scrollY - scrollStart) / (scrollEnd - scrollStart);
+            scrollProgress = Math.max(0, Math.min(1, scrollProgress)); // Clamp between 0 and 1
+
+            const planeSize = 200; // Increased size of both airplanes
+            paperAirplane1.style.width = `${planeSize}px`;
+            paperAirplane1.style.height = `${planeSize}px`;
+            paperAirplane2.style.width = `${planeSize}px`;
+            paperAirplane2.style.height = `${planeSize}px`;
+
+            const sectionWidth = experienceSection.offsetWidth;
+            const sectionHeight = experienceSection.offsetHeight;
+
+            // --- Logic for Paper Airplane 1 (Right to Left, -45deg tilt, flipped) ---
+            // Starts off-screen right, moves across to off-screen left
+            const startX1 = sectionWidth + 100; // Start further off-screen right
+            const endX1 = -planeSize - 100; // End further off-screen left
+            const startY1 = 50; // Fixed Y position relative to section top
+            const endY1 = 50 + (sectionHeight * 0.1); // Slight diagonal down
+
+            let currentX1 = startX1 + (endX1 - startX1) * scrollProgress;
+            let currentY1 = startY1 + (endY1 - startY1) * scrollProgress;
+
+            const fixedRotationZ1 = -45; // Downward tilt for right-to-left movement
+            const flipY1 = 180; // Horizontal flip to make it face left
+            paperAirplane1.style.transform = `translate(${currentX1}px, ${currentY1}px) rotateY(${flipY1}deg) rotateZ(${fixedRotationZ1}deg)`;
+
+            // --- Logic for Paper Airplane 2 (Left to Right, -45deg tilt, slightly offset) ---
+            // Starts off-screen left, moves to the right edge
+            const startX2 = -planeSize * 2; // Start further left for a staggered effect and slower perceived speed
+            const endX2 = sectionWidth + planeSize; // End further right
+            const startY2 = sectionHeight * 0.4; // Raised up
+            const endY2 = sectionHeight * 0.4 + (sectionHeight * 0.15); // Slight diagonal down
+
+            let currentX2 = startX2 + (endX2 - startX2) * scrollProgress;
+            let currentY2 = startY2 + (endY2 - startY2) * scrollProgress;
+
+            const fixedRotationZ2 = -45; // Downward tilt
+            const flipY2 = 180; // Horizontal flip (180 degrees around Y-axis) to make it face right
+            paperAirplane2.style.transform = `translate(${currentX2}px, ${currentY2}px) rotateY(${flipY2}deg) rotateZ(${fixedRotationZ2}deg)`;
+        });
+
+        // Trigger scroll event once on load to set initial position
+        window.dispatchEvent(new Event('scroll'));
+    }
+
+    // --- Motion Blur Effect for Sections and Hero Content Visibility ---
+    window.addEventListener('scroll', function() {
+        const currentScrollY = window.scrollY;
+        const heroSectionHeight = window.innerHeight; // Assuming hero section is 100vh
+
+        // Clear any existing timeout for hiding the nav
+        clearTimeout(scrollTimeoutId);
+
+        // Nav bar logic
+        if (currentScrollY === 0) {
+            applyFullNavState();
+            // Show hero description and button when at the very top
+            if (heroDescription) heroDescription.classList.remove('fade-out');
+            if (viewWorkButton) viewWorkButton.classList.remove('fade-out');
+            if (heroDescription) heroDescription.classList.add('fade-in');
+            if (viewWorkButton) viewWorkButton.classList.add('fade-in');
+        } else if (currentScrollY < lastScrollY) {
+            // Scrolling up, remove hidden-nav to fade in
+            nav.classList.remove('hidden-nav');
+            // Show hero description and button when scrolling up from hero section
+            if (currentScrollY < heroSectionHeight) {
+                if (heroDescription) heroDescription.classList.remove('fade-out');
+                if (viewWorkButton) viewWorkButton.classList.remove('fade-out');
+                if (heroDescription) heroDescription.classList.add('fade-in');
+                if (viewWorkButton) viewWorkButton.classList.add('fade-in');
+            }
+        } else if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold) {
+            // Scrolling down, add hidden-nav to fade out
+            nav.classList.add('hidden-nav');
+            // Hide hero description and button when scrolling down past hero section
+            if (currentScrollY >= heroSectionHeight) {
+                if (heroDescription) heroDescription.classList.remove('fade-in');
+                if (viewWorkButton) viewWorkButton.classList.remove('fade-in');
+                if (heroDescription) heroDescription.classList.add('fade-out');
+                if (viewWorkButton) viewWorkButton.classList.add('fade-out');
+            }
+        }
+
+        if (currentScrollY !== 0) {
+            scrollTimeoutId = setTimeout(hideNavCompletely, 3000); // Hide after 3 seconds of no scrolling
+        }
+
+        lastScrollY = currentScrollY;
+
+        // Call the overlap checks for nav bar and buttons
+        checkNavBarOverlap();
+        checkResumeButtonOverlap();
+        checkBackToTopButtonOverlap(); // Call for back-to-top button
+
+        // --- Back to Top Button Visibility Logic ---
+        if (backToTopButton) {
+            const scrollShowThreshold = window.innerHeight * 0.5; // Show after scrolling half a viewport
+            if (currentScrollY > scrollShowThreshold) {
+                backToTopButton.classList.add('is-visible');
+            } else {
+                backToTopButton.classList.remove('is-visible');
+            }
+        }
+        // --- End Back to Top Button Visibility Logic ---
+
+        // Motion blur effect for experience section
+        if (experienceSection) {
+            const sectionRect = experienceSection.getBoundingClientRect();
+            const viewportHeight = window.innerHeight;
+            const maxBlurExperience = 10; // Lowered max blur for experience section
+
+            let blurValue = 0;
+            if (sectionRect.top < viewportHeight && sectionRect.bottom > 0) {
+                let progress = (viewportHeight - sectionRect.top) / viewportHeight;
+                progress = Math.max(0, Math.min(1, progress));
+                blurValue = (1 - progress) * maxBlurExperience;
+            }
+            experienceSection.style.filter = `blur(${blurValue}px)`;
+        }
+
+        // Motion blur effect and visibility for Hero section content
+        if (fixedHeroContent) {
+            const heroRect = fixedHeroContent.getBoundingClientRect();
+            const maxBlurHero = 3; // Small amount of blur for hero section
+
+            let blurValueHero = 0;
+            if (heroRect.top < 0 && heroRect.bottom > 0) {
+                let progress = Math.abs(heroRect.top) / heroRect.height;
+                progress = Math.min(1, progress);
+                blurValueHero = progress * maxBlurHero;
+            } else if (heroRect.bottom <= 0) {
+                blurValueHero = maxBlurHero;
+            }
+            if (heroBackground) heroBackground.style.filter = `brightness(0.7) blur(${blurValueHero}px)`;
+            if (hatemPic) hatemPic.style.filter = `brightness(0.9) blur(${blurValueHero}px)`;
+
+            // Control visibility of fixedHeroContent based on scroll
+            if (currentScrollY >= heroSectionHeight - 100) { // Fade out when approaching the end of hero section
+                fixedHeroContent.classList.add('hidden-hero');
+            } else {
+                fixedHeroContent.classList.remove('hidden-hero');
+            }
+        }
+    });
+
+    // --- Back to Top Button Click Logic ---
+    if (backToTopButton) {
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth' // Smooth scroll to the top
+            });
+        });
+    }
+    // --- End Back to Top Button Click Logic ---
+
+    // --- Contact Modal Logic ---
+    const contactMeButton = document.getElementById('contact-me-button');
+    const contactModalOverlay = document.getElementById('contact-modal-overlay');
+    const modalCloseButton = document.getElementById('modal-close-button');
+    const contactForm = document.getElementById('contact-form');
+    const formStatusMessage = document.getElementById('form-status-message');
+
+    if (contactMeButton && contactModalOverlay && modalCloseButton && contactForm && formStatusMessage) {
+        // Open modal
+        contactMeButton.addEventListener('click', function() {
+            contactModalOverlay.classList.add('active');
+        });
+
+        // Close modal via close button
+        modalCloseButton.addEventListener('click', function() {
+            contactModalOverlay.classList.remove('active');
+            formStatusMessage.textContent = ''; // Clear message on close
+            contactForm.reset(); // Clear form fields
+        });
+
+        // Close modal by clicking outside content
+        contactModalOverlay.addEventListener('click', function(event) {
+            if (event.target === contactModalOverlay) {
+                contactModalOverlay.classList.remove('active');
+                formStatusMessage.textContent = ''; // Clear message on close
+                contactForm.reset(); // Clear form fields
+            }
+        });
+
+        // Handle form submission
+        contactForm.addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+
+            if (name && email && subject && message) {
+                const mailtoLink = `mailto:hatemanassamad@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`)}`;
+                
+                // Attempt to open the user's email client
+                window.location.href = mailtoLink;
+
+                formStatusMessage.textContent = 'Your email client should open shortly. Please send the email manually.';
+                formStatusMessage.classList.remove('error');
+                formStatusMessage.classList.add('success');
+
+                // Optionally, clear the form after a short delay
+                setTimeout(() => {
+                    contactForm.reset();
+                    contactModalOverlay.classList.remove('active');
+                    formStatusMessage.textContent = '';
+                }, 3000); // Clear form and close modal after 3 seconds
+            } else {
+                formStatusMessage.textContent = 'Please fill in all fields.';
+                formStatusMessage.classList.remove('success');
+                formStatusMessage.classList.add('error');
+            }
+        });
+    }
+    // --- End Contact Modal Logic ---
+
+    // --- Project Slider Logic ---
+    if (sliderWrapper && sliderPrevBtn && sliderNextBtn && sliderPagination) {
+        slides = Array.from(sliderWrapper.querySelectorAll('.slider-slide'));
+        
+        // Create pagination dots
+        slides.forEach((_, index) => {
+            const dot = document.createElement('span');
+            dot.classList.add('dot');
+            if (index === 0) {
+                dot.classList.add('active');
+            }
+            dot.addEventListener('click', () => showSlide(index));
+            sliderPagination.appendChild(dot);
+        });
+
+        const dots = Array.from(sliderPagination.querySelectorAll('.dot'));
+
+        function showSlide(index) {
+            if (index < 0) {
+                currentSlideIndex = slides.length - 1;
+            } else if (index >= slides.length) {
+                currentSlideIndex = 0;
+            } else {
+                currentSlideIndex = index;
+            }
+
+            const offset = -currentSlideIndex * 100;
+            sliderWrapper.style.transform = `translateX(${offset}%)`;
+
+            // Update active dot
+            dots.forEach((dot, i) => {
+                if (i === currentSlideIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        sliderPrevBtn.addEventListener('click', () => showSlide(currentSlideIndex - 1));
+        sliderNextBtn.addEventListener('click', () => showSlide(currentSlideIndex + 1));
+
+        // Touch/Swipe functionality
+        sliderWrapper.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+        });
+
+        sliderWrapper.addEventListener('touchmove', (e) => {
+            endX = e.touches[0].clientX;
+        });
+
+        sliderWrapper.addEventListener('touchend', () => {
+            const diff = startX - endX;
+            if (diff > 50) { // Swiped left
+                showSlide(currentSlideIndex + 1);
+            } else if (diff < -50) { // Swiped right
+                showSlide(currentSlideIndex - 1);
+            }
+            startX = 0;
+            endX = 0;
+        });
+
+        // Initial display
+        showSlide(0);
+    }
+    // --- End Project Slider Logic ---
 
     // Run the checks once on load to set initial state
     checkResumeButtonOverlap();
-    checkNavBarOverlap(); // Run for nav bar
+    checkNavBarOverlap();
+    checkBackToTopButtonOverlap(); // Call for back-to-top button on load
+    window.dispatchEvent(new Event('scroll')); // Trigger scroll on load for initial plane positions and hero visibility
 });
